@@ -1,0 +1,231 @@
+@import "tailwindcss";
+
+/* ─── Light / Dark CSS Variables ─── */
+:root {
+  --color-surface: #f8f9fc;
+  --color-surface-dim: #f0f1f4;
+  --color-surface-bright: #ffffff;
+  --color-surface-lowest: #ffffff;
+  --color-surface-low: #f4f5f8;
+  --color-surface-container: #eef0f4;
+  --color-surface-high: #e8eaee;
+  --color-surface-highest: #e2e4e8;
+  --color-on-surface: #101418;
+  --color-on-surface-variant: #3a4049;
+  --color-primary: #005ac2;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #d8e2ff;
+  --color-primary-glow: #005ac233;
+  --color-secondary: #006879;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #a4edff;
+  --color-tertiary: #4a5165;
+  --color-outline: #5c606a;
+  --color-outline-variant: #b0b4bf;
+  --color-background: #ffffff;
+  --color-on-background: #101418;
+  --color-error: #ba1a1a;
+}
+
+html.dark {
+  --color-surface: #101415;
+  --color-surface-dim: #101415;
+  --color-surface-bright: #363a3b;
+  --color-surface-lowest: #0b0f10;
+  --color-surface-low: #191c1e;
+  --color-surface-container: #1d2022;
+  --color-surface-high: #272a2c;
+  --color-surface-highest: #323537;
+  --color-on-surface: #e0e3e5;
+  --color-on-surface-variant: #c2c6d6;
+  --color-primary: #adc6ff;
+  --color-on-primary: #002e6a;
+  --color-primary-container: #4d8eff;
+  --color-primary-glow: #adc6ff33;
+  --color-secondary: #4cd7f6;
+  --color-on-secondary: #003640;
+  --color-secondary-container: #03b5d3;
+  --color-tertiary: #bec6e0;
+  --color-outline: #8c909f;
+  --color-outline-variant: #424754;
+  --color-background: #101415;
+  --color-on-background: #e0e3e5;
+  --color-error: #ffb4ab;
+}
+
+@theme inline {
+  --color-surface: var(--color-surface);
+  --color-surface-dim: var(--color-surface-dim);
+  --color-surface-bright: var(--color-surface-bright);
+  --color-surface-lowest: var(--color-surface-lowest);
+  --color-surface-low: var(--color-surface-low);
+  --color-surface-container: var(--color-surface-container);
+  --color-surface-high: var(--color-surface-high);
+  --color-surface-highest: var(--color-surface-highest);
+  --color-on-surface: var(--color-on-surface);
+  --color-on-surface-variant: var(--color-on-surface-variant);
+
+  --color-primary: var(--color-primary);
+  --color-on-primary: var(--color-on-primary);
+  --color-primary-container: var(--color-primary-container);
+  --color-primary-glow: var(--color-primary-glow);
+
+  --color-secondary: var(--color-secondary);
+  --color-on-secondary: var(--color-on-secondary);
+  --color-secondary-container: var(--color-secondary-container);
+
+  --color-tertiary: var(--color-tertiary);
+
+  --color-outline: var(--color-outline);
+  --color-outline-variant: var(--color-outline-variant);
+
+  --color-background: var(--color-background);
+  --color-on-background: var(--color-on-background);
+
+  --color-error: var(--color-error);
+
+  --font-display: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+/* ─── Base Styles ─── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-background);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background-color: var(--color-primary-glow);
+  color: var(--color-on-surface);
+}
+
+/* ─── Custom Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface-lowest);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-outline);
+}
+
+/* ─── Glass Card ─── */
+.glass-card {
+  background: rgba(29, 32, 34, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+html.light .glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+/* ─── Text Glow ─── */
+.text-glow {
+  text-shadow: 0 0 40px rgba(173, 198, 255, 0.3), 0 0 80px rgba(173, 198, 255, 0.1);
+}
+
+html.light .text-glow {
+  text-shadow: none;
+}
+
+/* ─── Timeline Track ─── */
+.timeline-track {
+  border-left: 2px solid var(--color-surface-highest);
+  transition: border-color 0.3s ease;
+}
+
+.timeline-node {
+  position: absolute;
+  left: -9px;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-background);
+  border: 3px solid var(--color-secondary);
+  box-shadow: 0 0 12px rgba(76, 215, 246, 0.3);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+html.light .timeline-node {
+  background: var(--color-surface-bright);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 8px rgba(0, 90, 194, 0.2);
+}
+
+/* ─── Section Fade In ─── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* ─── Gradient Border ─── */
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(173, 198, 255, 0.3), rgba(76, 215, 246, 0.1), transparent);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+html.light .gradient-border::before {
+  background: linear-gradient(135deg, rgba(0, 90, 194, 0.2), rgba(0, 104, 121, 0.1), transparent);
+}
+
+/* ─── Pulse Ring ─── */
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 215, 246, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 12px rgba(76, 215, 246, 0);
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s infinite;
+}
+
+/* ─── Smooth transitions for theme-aware elements ─── */
+nav, section, footer, div, a, button, input, textarea, span, p, h1, h2, h3, h4 {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
