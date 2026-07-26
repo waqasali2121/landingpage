@@ -1,22 +1,12 @@
 import type { NextConfig } from "next";
 
-const isGithubActions = process.env.GITHUB_ACTIONS || false;
-
-let assetPrefix = '';
-let basePath = '';
-
-if (isGithubActions) {
-  // Trim off `<owner>.github.io/` to just get the repository name
-  const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '');
-
-  assetPrefix = `/${repo}/`;
-  basePath = `/${repo}`;
-}
+const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig: NextConfig = {
   output: "export",
-  assetPrefix: assetPrefix,
-  basePath: basePath,
+  // In production, we are hosted at https://waqasali2121.github.io/landingpage/
+  assetPrefix: isProd ? '/landingpage/' : '',
+  basePath: isProd ? '/landingpage' : '',
   images: {
     unoptimized: true, // Required for static export
   },

@@ -47,7 +47,10 @@ jobs:
         
       - name: Build with Next.js
         run: cd portfolio-next && npx next build
-        
+
+      - name: Disable Jekyll
+        run: touch ./portfolio-next/out/.nojekyll
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
