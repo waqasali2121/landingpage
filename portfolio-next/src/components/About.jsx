@@ -74,7 +74,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="text-lg text-on-surface mb-6 leading-relaxed rtl:font-nastaleeq rtl:text-2xl rtl:leading-loose"
+              className="text-lg text-justify text-on-surface mb-6 leading-relaxed rtl:font-nastaleeq rtl:text-2xl rtl:leading-loose"
             >
               {personalInfo.bio}
             </motion.p>
@@ -83,7 +83,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="text-base text-on-surface-variant mb-8 leading-relaxed rtl:font-nastaleeq rtl:text-xl rtl:leading-loose"
+              className="text-base text-justify text-on-surface-variant mb-8 leading-relaxed rtl:font-nastaleeq rtl:text-xl rtl:leading-loose"
             >
               {personalInfo.vision}
             </motion.p>

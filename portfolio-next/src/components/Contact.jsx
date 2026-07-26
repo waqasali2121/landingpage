@@ -20,11 +20,36 @@ export default function Contact() {
   const personalInfo = language === 'ur' ? urduData.personalInfo : enPersonalInfo;
   const uiLabels = language === 'ur' ? urduData.uiLabels : enUiLabels;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
-    setFormData({ name: "", email: "", subject: "", message: "" });
+
+    // Create FormData object to send to Web3Forms
+    const submissionData = new FormData();
+    submissionData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY); // Using environment variable
+    submissionData.append("name", formData.name);
+    submissionData.append("email", formData.email);
+    submissionData.append("subject", formData.subject);
+    submissionData.append("message", formData.message);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: submissionData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        setTimeout(() => setSubmitted(false), 3000);
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        alert("Something went wrong! Please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error submitting form!");
+    }
   };
 
   const handleChange = (e) => {
