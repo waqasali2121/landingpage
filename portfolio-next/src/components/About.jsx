@@ -34,7 +34,7 @@ export default function About() {
                   className="w-full h-full relative"
                 >
                   <Image
-                    src="/profile.png"
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/profile.png`}
                     alt={`Portrait of ${personalInfo.name}`}
                     fill
                     className="object-cover"

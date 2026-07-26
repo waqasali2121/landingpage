@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // Required for static export
   },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isProd ? '/landingpage' : '',
+  }
 };
 
 export default nextConfig;
