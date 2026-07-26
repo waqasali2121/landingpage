@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
+import { Outfit, Inter, Noto_Nastaliq_Urdu } from "next/font/google";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -13,6 +14,13 @@ const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+const nastaliq = Noto_Nastaliq_Urdu({
+  variable: "--font-nastaleeq",
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -40,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${inter.variable} dark`}
+      className={`${outfit.variable} ${inter.variable} ${nastaliq.variable} dark`}
       suppressHydrationWarning
     >
       <head>
@@ -67,8 +75,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-background text-on-background antialiased overflow-x-hidden">
-        {children}
+      <body className="min-h-screen bg-background text-on-background antialiased overflow-x-hidden rtl:font-nastaleeq">
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -86,6 +86,7 @@ html.dark {
 
   --font-display: "Outfit", sans-serif;
   --font-body: "Inter", sans-serif;
+  --font-nastaleeq: var(--font-nastaleeq);
 }
 
 /* ─── Base Styles ─── */
@@ -150,7 +151,7 @@ html.light .text-glow {
 
 /* ─── Timeline Track ─── */
 .timeline-track {
-  border-left: 2px solid var(--color-surface-highest);
+  border-left: 2px dashed var(--color-surface-highest);
   transition: border-color 0.3s ease;
 }
 

@@ -1,9 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { researchInterests } from "@/data/portfolioData";
+import { researchInterests as enResearchInterests, uiLabels as enUiLabels } from "@/data/portfolioData";
+import { urduData } from "@/data/urduData";
+import { useLanguage } from "./LanguageProvider";
 
 export default function Research() {
+  const { language } = useLanguage();
+
+  const researchInterests = language === 'ur' ? urduData.researchInterests : enResearchInterests;
+  const uiLabels = language === 'ur' ? urduData.uiLabels : enUiLabels;
+
   return (
     <section id="research" className="py-20">
       <div className="px-5 md:px-16 max-w-[1280px] mx-auto">
@@ -14,8 +21,8 @@ export default function Research() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="font-[var(--font-display)] text-[32px] font-semibold text-on-surface mb-4">
-            Core Research Focus
+          <h2 className="font-[var(--font-display)] text-[32px] font-semibold text-on-surface mb-4 rtl:font-nastaleeq rtl:text-[40px]">
+            {uiLabels.researchTitle}
           </h2>
           <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
         </motion.div>
@@ -25,15 +32,16 @@ export default function Research() {
           {researchInterests.map((item, index) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -5, boxShadow: "0 10px 30px -10px rgba(0, 0, 0, 0.2)" }}
               className={`glass-card p-8 rounded-xl flex ${
                 item.large
                   ? "md:col-span-2 flex-col md:flex-row gap-8"
                   : "flex-col"
-              } hover:border-primary/50 transition-colors group relative overflow-hidden`}
+              } hover:border-primary/50 transition-all duration-300 group relative overflow-hidden`}
             >
               <div className={item.large ? "flex-1" : ""}>
                 <span
@@ -43,16 +51,16 @@ export default function Research() {
                 >
                   {item.icon}
                 </span>
-                <h3 className="font-[var(--font-display)] text-2xl font-semibold text-on-surface mb-3">
+                <h3 className="font-[var(--font-display)] text-2xl font-semibold text-on-surface mb-3 rtl:font-nastaleeq rtl:text-[28px]">
                   {item.title}
                 </h3>
-                <p className="text-on-surface-variant mb-6 text-justify">
+                <p className="text-on-surface-variant mb-6 text-justify rtl:font-nastaleeq rtl:text-xl rtl:leading-loose">
                   {item.description}
                 </p>
 
                 {/* Features list */}
                 {item.features && (
-                  <ul className="space-y-2 text-sm text-on-surface-variant">
+                  <ul className="space-y-2 text-sm text-on-surface-variant rtl:font-nastaleeq rtl:text-lg">
                     {item.features.map((feat) => (
                       <li key={feat} className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-secondary text-sm">
@@ -70,7 +78,7 @@ export default function Research() {
                     {item.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="bg-surface-highest px-3 py-1 rounded text-xs font-semibold text-on-surface-variant"
+                        className="bg-surface-highest px-3 py-1 rounded text-xs font-semibold text-on-surface-variant rtl:font-nastaleeq rtl:text-sm"
                       >
                         {tag}
                       </span>
@@ -81,7 +89,7 @@ export default function Research() {
                 {/* Badge */}
                 {item.badge && (
                   <div className="mt-auto">
-                    <span className="text-primary font-bold text-sm">
+                    <span className="text-primary font-bold text-sm rtl:font-nastaleeq rtl:text-base">
                       {item.badge}
                     </span>
                   </div>

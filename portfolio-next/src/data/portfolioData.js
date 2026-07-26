@@ -102,7 +102,8 @@ export const publications = [
     year: "2019",
     title: "Joint Sybil Attack Prevention and Energy Conservation in Wireless Sensor Networks.",
     venue: "Proceedings of the IEEE/IFIP International Conference on Information and Communication Technology for Intelligent Systems (FIT 2019). IEEE.",
-    publisher: "IEEE FIT · 2019"
+    publisher: "IEEE FIT · 2019",
+    link: "https://ieeexplore.ieee.org/document/8991659"
   },
   {
     id: 2,
@@ -110,7 +111,8 @@ export const publications = [
     year: "2025",
     title: "Artificial Intelligence-based Control Systems for Power Electronics Applications.",
     venue: "Proceedings of Kashf Journal of Multidisciplinary Research 2025. KJMR",
-    publisher: "KJMR · 2025"
+    publisher: "KJMR · 2025",
+    link: "https://kjmr.com.pk/kjmr/article/view/607"
   }
 ];
 
@@ -144,3 +146,25 @@ export const navLinks = [
   { name: "Skills", href: "#skills" },
   { name: "Contact", href: "#contact" },
 ];
+
+export const uiLabels = {
+  downloadCv: "Download CV",
+  getInTouch: "Get In Touch",
+  publicationsTitle: "Selected Publications",
+  experienceTitle: "Professional Experience",
+  researchTitle: "Research Interests",
+  educationTitle: "Academic Journey",
+  skillsTitle: "Technical Expertise",
+  coursesTaught: "Courses Taught",
+  contactTitle: "Get In Touch",
+  contactDesc: "I'm always open to discussing new opportunities, collaborations, or chatting about cybersecurity and AI.",
+  formName: "Name",
+  formEmail: "Email",
+  formMessage: "Message",
+  formSubmit: "Send Message",
+  sending: "Sending...",
+  messageSent: "Message sent successfully!",
+  messageError: "Something went wrong. Please try again.",
+  footerText: "All rights reserved. Built by Waqas Ali.",
+  viewProject: "View Project"
+};

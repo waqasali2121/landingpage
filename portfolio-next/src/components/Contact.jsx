@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { personalInfo } from "@/data/portfolioData";
+import { personalInfo as enPersonalInfo, uiLabels as enUiLabels } from "@/data/portfolioData";
+import { urduData } from "@/data/urduData";
+import { useLanguage } from "./LanguageProvider";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -12,6 +14,11 @@ export default function Contact() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+
+  const { language } = useLanguage();
+
+  const personalInfo = language === 'ur' ? urduData.personalInfo : enPersonalInfo;
+  const uiLabels = language === 'ur' ? urduData.uiLabels : enUiLabels;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,13 +44,11 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-[var(--font-display)] text-[32px] font-semibold text-on-surface mb-6">
-              Get in Touch
+            <h2 className="font-[var(--font-display)] text-[32px] font-semibold text-on-surface mb-6 rtl:font-nastaleeq rtl:text-[40px]">
+              {uiLabels.contactTitle}
             </h2>
-            <p className="text-lg text-on-surface-variant mb-8 leading-relaxed">
-              I am always open to discussing new research collaborations,
-              speaking opportunities, or academic inquiries. Please use the form
-              or reach out via my professional networks.
+            <p className="text-lg text-on-surface-variant mb-8 leading-relaxed rtl:font-nastaleeq rtl:text-2xl rtl:leading-loose">
+              {uiLabels.contactDesc}
             </p>
 
             <div className="space-y-4">
@@ -54,10 +59,11 @@ export default function Contact() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-on-surface font-bold text-sm mb-0.5">Email</h4>
+                  <h4 className="text-on-surface font-bold text-sm mb-0.5 rtl:font-nastaleeq rtl:text-base">{uiLabels.formEmail}</h4>
                   <a
                     href={`mailto:${personalInfo.email}`}
                     className="text-on-surface-variant hover:text-primary transition-colors text-sm"
+                    dir="ltr"
                   >
                     {personalInfo.email}
                   </a>
@@ -71,8 +77,8 @@ export default function Contact() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-on-surface font-bold text-sm mb-0.5">Phone</h4>
-                  <p className="text-on-surface-variant text-sm">{personalInfo.phone}</p>
+                  <h4 className="text-on-surface font-bold text-sm mb-0.5 rtl:font-nastaleeq rtl:text-base">{language === 'en' ? 'Phone' : 'فون'}</h4>
+                  <p className="text-on-surface-variant text-sm" dir="ltr">{personalInfo.phone}</p>
                 </div>
               </div>
 
@@ -83,8 +89,8 @@ export default function Contact() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-on-surface font-bold text-sm mb-0.5">Location</h4>
-                  <p className="text-on-surface-variant text-sm">
+                  <h4 className="text-on-surface font-bold text-sm mb-0.5 rtl:font-nastaleeq rtl:text-base">{language === 'en' ? 'Location' : 'پتہ'}</h4>
+                  <p className="text-on-surface-variant text-sm rtl:font-nastaleeq rtl:text-base">
                     {personalInfo.location}
                   </p>
                 </div>
@@ -103,16 +109,16 @@ export default function Contact() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label
-                    className="text-sm font-medium text-on-surface"
+                    className="text-sm font-medium text-on-surface rtl:font-nastaleeq rtl:text-lg"
                     htmlFor="name"
                   >
-                    Name
+                    {uiLabels.formName}
                   </label>
                   <input
-                    className="w-full bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 text-on-surface placeholder:text-outline/50 outline-none transition-colors"
+                    className="w-full bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 text-on-surface placeholder:text-outline/50 outline-none transition-colors rtl:font-nastaleeq rtl:text-lg"
                     id="name"
                     name="name"
-                    placeholder="Your name"
+                    placeholder={language === 'en' ? "Your name" : "آپ کا نام"}
                     type="text"
                     value={formData.name}
                     onChange={handleChange}
@@ -121,10 +127,10 @@ export default function Contact() {
                 </div>
                 <div className="space-y-2">
                   <label
-                    className="text-sm font-medium text-on-surface"
+                    className="text-sm font-medium text-on-surface rtl:font-nastaleeq rtl:text-lg"
                     htmlFor="email"
                   >
-                    Email
+                    {uiLabels.formEmail}
                   </label>
                   <input
                     className="w-full bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 text-on-surface placeholder:text-outline/50 outline-none transition-colors"
@@ -141,16 +147,16 @@ export default function Contact() {
 
               <div className="space-y-2">
                 <label
-                  className="text-sm font-medium text-on-surface"
+                  className="text-sm font-medium text-on-surface rtl:font-nastaleeq rtl:text-lg"
                   htmlFor="subject"
                 >
-                  Subject
+                  {language === 'en' ? 'Subject' : 'موضوع'}
                 </label>
                 <input
-                  className="w-full bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 text-on-surface placeholder:text-outline/50 outline-none transition-colors"
+                  className="w-full bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 text-on-surface placeholder:text-outline/50 outline-none transition-colors rtl:font-nastaleeq rtl:text-lg"
                   id="subject"
                   name="subject"
-                  placeholder="Collaboration Inquiry"
+                  placeholder={language === 'en' ? "Collaboration Inquiry" : "اشتراک کے حوالے سے"}
                   type="text"
                   value={formData.subject}
                   onChange={handleChange}
@@ -160,16 +166,16 @@ export default function Contact() {
 
               <div className="space-y-2">
                 <label
-                  className="text-sm font-medium text-on-surface"
+                  className="text-sm font-medium text-on-surface rtl:font-nastaleeq rtl:text-lg"
                   htmlFor="message"
                 >
-                  Message
+                  {uiLabels.formMessage}
                 </label>
                 <textarea
-                  className="w-full bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 text-on-surface placeholder:text-outline/50 outline-none transition-colors resize-none"
+                  className="w-full bg-surface-container border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-lg p-3 text-on-surface placeholder:text-outline/50 outline-none transition-colors resize-none rtl:font-nastaleeq rtl:text-lg"
                   id="message"
                   name="message"
-                  placeholder="Your message here..."
+                  placeholder={language === 'en' ? "Your message here..." : "اپنا پیغام یہاں لکھیں..."}
                   rows={4}
                   value={formData.message}
                   onChange={handleChange}
@@ -178,7 +184,7 @@ export default function Contact() {
               </div>
 
               <button
-                className={`w-full py-4 font-bold rounded-lg flex items-center justify-center gap-2 transition-all ${
+                className={`w-full py-4 font-bold rounded-lg flex items-center justify-center gap-2 transition-all rtl:font-nastaleeq rtl:text-xl ${
                   submitted
                     ? "bg-green-600 text-white"
                     : "bg-primary text-on-primary hover:shadow-lg hover:shadow-primary/20"
@@ -191,12 +197,12 @@ export default function Contact() {
                     <span className="material-symbols-outlined">
                       check_circle
                     </span>
-                    Message Sent!
+                    {uiLabels.messageSent}
                   </>
                 ) : (
                   <>
-                    Send Message
-                    <span className="material-symbols-outlined">send</span>
+                    {uiLabels.formSubmit}
+                    <span className={`material-symbols-outlined ${language === 'ur' ? 'rotate-180' : ''}`}>send</span>
                   </>
                 )}
               </button>

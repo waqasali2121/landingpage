@@ -2,13 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { navLinks, personalInfo } from "@/data/portfolioData";
+import { navLinks as enNavLinks, personalInfo as enPersonalInfo, uiLabels as enUiLabels } from "@/data/portfolioData";
+import { urduData } from "@/data/urduData";
+import { useLanguage } from "./LanguageProvider";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+
+  const { language, toggleLanguage } = useLanguage();
+
+  const navLinks = language === 'ur' ? urduData.navLinks : enNavLinks;
+  const personalInfo = language === 'ur' ? urduData.personalInfo : enPersonalInfo;
+  const uiLabels = language === 'ur' ? urduData.uiLabels : enUiLabels;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -59,7 +67,7 @@ export default function Navbar() {
             <a
               key={link.name}
               href={link.href}
-              className={`text-sm font-medium transition-colors duration-200 ${
+              className={`text-sm font-medium transition-colors duration-200 rtl:text-base rtl:font-nastaleeq ${
                 activeSection === link.href.slice(1)
                   ? "text-primary font-bold border-b-2 border-primary pb-1"
                   : "text-on-surface-variant hover:text-on-surface"
@@ -72,14 +80,22 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-low transition-colors text-on-surface font-bold text-sm"
+            aria-label="Toggle language"
+            title="Toggle language"
+          >
+            {language === 'en' ? 'اردو' : 'EN'}
+          </button>
           <ThemeToggle />
           <a
             href="/Waqas Ali CV updated.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:flex items-center px-6 py-2 bg-primary text-on-primary text-sm font-medium rounded-full hover:scale-105 active:scale-95 transition-all"
+            className="hidden md:flex items-center px-6 py-2 bg-primary text-on-primary text-sm font-medium rounded-full hover:scale-105 active:scale-95 transition-all rtl:font-nastaleeq rtl:text-lg rtl:py-1"
           >
-            Download CV
+            {uiLabels.downloadCv}
           </a>
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -108,7 +124,7 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors rtl:font-nastaleeq rtl:text-lg ${
                     activeSection === link.href.slice(1)
                       ? "text-primary bg-primary/10"
                       : "text-on-surface-variant hover:text-on-surface hover:bg-white/5"
@@ -121,9 +137,9 @@ export default function Navbar() {
                 href="/Waqas Ali CV updated.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 px-4 py-3 bg-primary text-on-primary text-sm font-medium rounded-lg text-center"
+                className="mt-2 px-4 py-3 bg-primary text-on-primary text-sm font-medium rounded-lg text-center rtl:font-nastaleeq rtl:text-lg"
               >
-                Download CV
+                {uiLabels.downloadCv}
               </a>
             </div>
           </motion.div>
