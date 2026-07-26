@@ -47,6 +47,8 @@ jobs:
         
       - name: Build with Next.js
         run: cd portfolio-next && npx next build
+        env:
+          NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY }}
 
       - name: Disable Jekyll
         run: touch ./portfolio-next/out/.nojekyll
