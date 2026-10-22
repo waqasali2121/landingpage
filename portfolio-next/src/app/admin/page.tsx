@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAdmin } from "@/context/AdminContext";
+import { useAdmin, THEME_PALETTES } from "@/context/AdminContext";
 import Link from "next/link";
 
 export default function AdminDashboard() {
@@ -22,6 +22,8 @@ export default function AdminDashboard() {
     experience,
     addExperience,
     deleteExperience,
+    currentTheme,
+    setTheme,
     resetToDefaults,
     exportData
   } = useAdmin();
@@ -91,7 +93,15 @@ export default function AdminDashboard() {
             <span className="material-symbols-outlined text-primary text-2xl">admin_panel_settings</span>
             <span className="font-[var(--font-display)] font-bold text-lg">Portfolio Control Center</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/projects"
+              target="_blank"
+              className="px-4 py-2 bg-surface-highest hover:bg-surface-container rounded-lg text-xs font-bold text-on-surface flex items-center gap-1.5 transition-colors"
+            >
+              <span className="material-symbols-outlined text-sm">folder</span>
+              Projects Page
+            </Link>
             <Link
               href="/"
               target="_blank"
@@ -124,6 +134,7 @@ export default function AdminDashboard() {
             { id: "projects", label: "Research Projects", icon: "folder" },
             { id: "publications", label: "Publications", icon: "menu_book" },
             { id: "experience", label: "Experience & Education", icon: "work" },
+            { id: "theme", label: "Theme & Colors", icon: "palette" },
             { id: "settings", label: "Backup & Security", icon: "settings" },
           ].map((tab) => (
             <button
@@ -149,7 +160,7 @@ export default function AdminDashboard() {
               <div className="glass-card p-6 rounded-2xl border border-outline-variant/30">
                 <h2 className="text-xl font-bold font-[var(--font-display)] mb-2">Welcome back, {personalInfo.name}!</h2>
                 <p className="text-on-surface-variant text-sm">
-                  Manage your portfolio content, research projects, publications, profile image, and credentials right from this control panel. Changes reflect instantly on your live landing page.
+                  Manage your portfolio content, research projects, publications, profile image, theme colors, and credentials right from this control panel. Changes reflect instantly on your live landing page.
                 </p>
               </div>
 
@@ -532,6 +543,53 @@ export default function AdminDashboard() {
                     </button>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Theme & Colors Tab */}
+          {activeTab === "theme" && (
+            <div className="glass-card p-8 rounded-2xl border border-outline-variant/30 space-y-6">
+              <div>
+                <h2 className="text-xl font-bold font-[var(--font-display)]">Theme & Color Combinations</h2>
+                <p className="text-xs text-on-surface-variant mt-1">Select a professional color palette for your portfolio. Changes apply instantly across the entire site.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.entries(THEME_PALETTES).map(([key, palette]) => {
+                  const isSelected = currentTheme === key;
+                  return (
+                    <div
+                      key={key}
+                      onClick={() => {
+                        setTheme(key);
+                        showToast(`Applied ${palette.name} theme!`);
+                      }}
+                      className={`p-6 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
+                        isSelected
+                          ? "border-primary bg-primary/10 shadow-lg shadow-primary/10"
+                          : "border-outline-variant/30 bg-surface-highest/30 hover:border-primary/50"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-bold text-sm">{palette.name}</h3>
+                          {isSelected && (
+                            <span className="px-2 py-0.5 bg-primary text-on-primary rounded text-[10px] font-bold">Active</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 mt-3">
+                          <div className="w-5 h-5 rounded-full" style={{ backgroundColor: palette.primary }} title="Primary" />
+                          <div className="w-5 h-5 rounded-full" style={{ backgroundColor: palette.secondary }} title="Secondary" />
+                          <div className="w-5 h-5 rounded-full" style={{ backgroundColor: palette.container }} title="Container" />
+                        </div>
+                      </div>
+                      <span className={`material-symbols-outlined text-2xl ${isSelected ? "text-primary" : "text-outline"}`}>
+                        {isSelected ? "radio_button_checked" : "radio_button_unchecked"}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

@@ -11,6 +11,14 @@ import {
   awards as initialAwards
 } from "@/data/portfolioData";
 
+export const THEME_PALETTES: Record<string, { name: string; primary: string; secondary: string; container: string }> = {
+  cyberpunk: { name: "Cyberpunk Neon", primary: "#adc6ff", secondary: "#4cd7f6", container: "#4d8eff" },
+  emerald: { name: "Emerald Tech", primary: "#34d399", secondary: "#2dd4bf", container: "#059669" },
+  indigo: { name: "Royal Indigo", primary: "#a78bfa", secondary: "#f472b6", container: "#8b5cf6" },
+  amber: { name: "Sunset Amber", primary: "#fbbf24", secondary: "#fb923c", container: "#f59e0b" },
+  slate: { name: "Corporate Slate", primary: "#38bdf8", secondary: "#818cf8", container: "#0ea5e9" }
+};
+
 interface AdminContextType {
   isAuthenticated: boolean;
   loading: boolean;
@@ -34,6 +42,8 @@ interface AdminContextType {
   education: any[];
   skills: any;
   awards: any[];
+  currentTheme: string;
+  setTheme: (themeKey: string) => void;
   resetToDefaults: () => void;
   exportData: () => void;
   importData: (jsonString: string) => boolean;
@@ -41,9 +51,10 @@ interface AdminContextType {
 
 const AdminContext = createContext<AdminContextType | null>(null);
 
-const STORAGE_KEY = "waqas_portfolio_admin_data_v2";
+const STORAGE_KEY = "waqas_portfolio_admin_data_v3";
 const AUTH_KEY = "waqas_portfolio_is_auth";
 const PASSWORD_KEY = "waqas_portfolio_admin_password";
+const THEME_KEY = "waqas_portfolio_theme";
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -54,6 +65,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [publications, setPublications] = useState(initialPublications);
   const [skills, setSkills] = useState(initialSkills);
   const [awards, setAwards] = useState(initialAwards);
+  const [currentTheme, setCurrentTheme] = useState("cyberpunk");
   const [loading, setLoading] = useState(true);
 
   // Load from localStorage on mount
@@ -61,6 +73,12 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     try {
       const auth = localStorage.getItem(AUTH_KEY) === "true";
       setIsAuthenticated(auth);
+
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      if (savedTheme && THEME_PALETTES[savedTheme]) {
+        setCurrentTheme(savedTheme);
+        applyTheme(savedTheme);
+      }
 
       const savedData = localStorage.getItem(STORAGE_KEY);
       if (savedData) {
@@ -72,6 +90,10 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         if (parsed.publications) setPublications(parsed.publications);
         if (parsed.skills) setSkills(parsed.skills);
         if (parsed.awards) setAwards(parsed.awards);
+        if (parsed.currentTheme) {
+          setCurrentTheme(parsed.currentTheme);
+          applyTheme(parsed.currentTheme);
+        }
       }
     } catch (e) {
       console.error("Failed to load admin state from localStorage", e);
@@ -79,6 +101,27 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
     }
   }, []);
+
+  const applyTheme = (themeKey: string) => {
+    const palette = THEME_PALETTES[themeKey];
+    if (!palette) return;
+    if (typeof document !== "undefined") {
+      const root = document.documentElement;
+      root.style.setProperty("--color-primary", palette.primary);
+      root.style.setProperty("--color-secondary", palette.secondary);
+      root.style.setProperty("--color-primary-container", palette.container);
+      root.style.setProperty("--color-primary-glow", `${palette.primary}33`);
+    }
+  };
+
+  const setTheme = (themeKey: string) => {
+    if (THEME_PALETTES[themeKey]) {
+      setCurrentTheme(themeKey);
+      applyTheme(themeKey);
+      localStorage.setItem(THEME_KEY, themeKey);
+      saveData({ currentTheme: themeKey });
+    }
+  };
 
   // Save changes to localStorage
   const saveData = (newData: any) => {
@@ -91,6 +134,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         publications,
         skills,
         awards,
+        currentTheme,
         ...newData
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
@@ -194,7 +238,10 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     setPublications(initialPublications);
     setSkills(initialSkills);
     setAwards(initialAwards);
+    setCurrentTheme("cyberpunk");
+    applyTheme("cyberpunk");
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(THEME_KEY);
   };
 
   const exportData = () => {
@@ -205,7 +252,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       experience,
       publications,
       skills,
-      awards
+      awards,
+      currentTheme
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -225,6 +273,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       if (parsed.publications) setPublications(parsed.publications);
       if (parsed.skills) setSkills(parsed.skills);
       if (parsed.awards) setAwards(parsed.awards);
+      if (parsed.currentTheme) setTheme(parsed.currentTheme);
       saveData(parsed);
       return true;
     } catch (e) {
@@ -258,6 +307,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         education,
         skills,
         awards,
+        currentTheme,
+        setTheme,
         resetToDefaults,
         exportData,
         importData
