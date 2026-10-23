@@ -15,12 +15,15 @@ export default function AdminDashboard() {
     updatePersonalInfo,
     researchInterests,
     addResearchProject,
+    updateResearchProject,
     deleteResearchProject,
     publications,
     addPublication,
+    updatePublication,
     deletePublication,
     experience,
     addExperience,
+    updateExperience,
     deleteExperience,
     currentTheme,
     setTheme,
@@ -32,10 +35,20 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [toast, setToast] = useState("");
 
-  // Form states for adding/editing
+  // Form states for adding
   const [newProject, setNewProject] = useState({ title: "", description: "", icon: "memory", color: "primary", tags: "", large: false });
   const [newPub, setNewPub] = useState({ title: "", authors: "", venue: "", publisher: "", year: "2025", link: "" });
   const [newExp, setNewExp] = useState({ role: "", company: "", period: "", description: "" });
+
+  // Edit states
+  const [editingProjectIndex, setEditingProjectIndex] = useState<number | null>(null);
+  const [editProjectForm, setEditProjectForm] = useState({ title: "", description: "", icon: "memory", color: "primary", tags: "", large: false });
+
+  const [editingPubIndex, setEditingPubIndex] = useState<number | null>(null);
+  const [editPubForm, setEditPubForm] = useState({ title: "", authors: "", venue: "", publisher: "", year: "2025", link: "" });
+
+  const [editingExpIndex, setEditingExpIndex] = useState<number | null>(null);
+  const [editExpForm, setEditExpForm] = useState({ role: "", company: "", period: "", description: "" });
 
   // Password change state
   const [passForm, setPassForm] = useState({ current: "", newPass: "", confirm: "" });
@@ -358,23 +371,110 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 <h3 className="font-bold text-sm">Existing Projects ({researchInterests.length})</h3>
                 {researchInterests.map((item: any, index: number) => (
-                  <div key={index} className="p-4 bg-surface-highest/40 border border-outline-variant/20 rounded-xl flex justify-between items-center gap-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-primary">{item.icon}</span>
-                        <h4 className="font-bold text-sm">{item.title}</h4>
+                  <div key={index} className="p-4 bg-surface-highest/40 border border-outline-variant/20 rounded-xl space-y-4">
+                    {editingProjectIndex === index ? (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <input
+                            type="text"
+                            value={editProjectForm.title}
+                            onChange={(e) => setEditProjectForm({ ...editProjectForm, title: e.target.value })}
+                            placeholder="Title"
+                            className="px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <input
+                            type="text"
+                            value={editProjectForm.icon}
+                            onChange={(e) => setEditProjectForm({ ...editProjectForm, icon: e.target.value })}
+                            placeholder="Icon"
+                            className="px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <input
+                            type="text"
+                            value={editProjectForm.tags}
+                            onChange={(e) => setEditProjectForm({ ...editProjectForm, tags: e.target.value })}
+                            placeholder="Tags (comma separated)"
+                            className="md:col-span-2 px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <textarea
+                            value={editProjectForm.description}
+                            onChange={(e) => setEditProjectForm({ ...editProjectForm, description: e.target.value })}
+                            placeholder="Description"
+                            rows={2}
+                            className="md:col-span-2 px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              updateResearchProject(index, {
+                                ...editProjectForm,
+                                tags: typeof editProjectForm.tags === 'string'
+                                  ? editProjectForm.tags.split(",").map((t: string) => t.trim()).filter(Boolean)
+                                  : editProjectForm.tags
+                              });
+                              setEditingProjectIndex(null);
+                              showToast("Project updated successfully!");
+                            }}
+                            className="px-4 py-2 bg-primary text-on-primary rounded-lg text-xs font-bold hover:bg-primary-container"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setEditingProjectIndex(null)}
+                            className="px-4 py-2 bg-surface-highest text-on-surface rounded-lg text-xs font-bold"
+                          >
+                            Cancel
+                          </button>
+                        </div>
                       </div>
-                      <p className="text-xs text-on-surface-variant mt-1 line-clamp-1">{item.description}</p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        deleteResearchProject(index);
-                        showToast("Project deleted.");
-                      }}
-                      className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition-colors"
-                    >
-                      Delete
-                    </button>
+                    ) : (
+                      <div className="flex justify-between items-center gap-4">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="material-symbols-outlined text-primary">{item.icon}</span>
+                            <h4 className="font-bold text-sm">{item.title}</h4>
+                          </div>
+                          <p className="text-xs text-on-surface-variant mt-1 line-clamp-1">{item.description}</p>
+                          {item.tags && item.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              {item.tags.map((t: string) => (
+                                <span key={t} className="px-2 py-0.5 bg-surface-highest text-[10px] rounded text-on-surface-variant">
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingProjectIndex(index);
+                              setEditProjectForm({
+                                title: item.title || "",
+                                description: item.description || "",
+                                icon: item.icon || "memory",
+                                color: item.color || "primary",
+                                tags: Array.isArray(item.tags) ? item.tags.join(", ") : (item.tags || ""),
+                                large: item.large || false
+                              });
+                            }}
+                            className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-xs font-bold transition-colors"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              deleteResearchProject(index);
+                              showToast("Project deleted.");
+                            }}
+                            className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -450,21 +550,108 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 <h3 className="font-bold text-sm">Existing Publications ({publications.length})</h3>
                 {publications.map((pub: any, index: number) => (
-                  <div key={index} className="p-4 bg-surface-highest/40 border border-outline-variant/20 rounded-xl flex justify-between items-center gap-4">
-                    <div>
-                      <span className="text-secondary text-xs font-bold">{pub.publisher}</span>
-                      <h4 className="font-bold text-sm mt-0.5">{pub.title}</h4>
-                      <p className="text-xs text-on-surface-variant mt-1">{pub.authors}</p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        deletePublication(index);
-                        showToast("Publication deleted.");
-                      }}
-                      className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition-colors"
-                    >
-                      Delete
-                    </button>
+                  <div key={index} className="p-4 bg-surface-highest/40 border border-outline-variant/20 rounded-xl space-y-4">
+                    {editingPubIndex === index ? (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <input
+                            type="text"
+                            value={editPubForm.title}
+                            onChange={(e) => setEditPubForm({ ...editPubForm, title: e.target.value })}
+                            placeholder="Paper Title"
+                            className="md:col-span-2 px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <input
+                            type="text"
+                            value={editPubForm.authors}
+                            onChange={(e) => setEditPubForm({ ...editPubForm, authors: e.target.value })}
+                            placeholder="Authors"
+                            className="px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <input
+                            type="text"
+                            value={editPubForm.year}
+                            onChange={(e) => setEditPubForm({ ...editPubForm, year: e.target.value })}
+                            placeholder="Year"
+                            className="px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <input
+                            type="text"
+                            value={editPubForm.publisher}
+                            onChange={(e) => setEditPubForm({ ...editPubForm, publisher: e.target.value })}
+                            placeholder="Publisher"
+                            className="px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <input
+                            type="text"
+                            value={editPubForm.link}
+                            onChange={(e) => setEditPubForm({ ...editPubForm, link: e.target.value })}
+                            placeholder="Link URL"
+                            className="px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <textarea
+                            value={editPubForm.venue}
+                            onChange={(e) => setEditPubForm({ ...editPubForm, venue: e.target.value })}
+                            placeholder="Venue Details"
+                            rows={2}
+                            className="md:col-span-2 px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              updatePublication(index, editPubForm);
+                              setEditingPubIndex(null);
+                              showToast("Publication updated successfully!");
+                            }}
+                            className="px-4 py-2 bg-primary text-on-primary rounded-lg text-xs font-bold hover:bg-primary-container"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setEditingPubIndex(null)}
+                            className="px-4 py-2 bg-surface-highest text-on-surface rounded-lg text-xs font-bold"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-between items-center gap-4">
+                        <div>
+                          <span className="text-secondary text-xs font-bold">{pub.publisher}</span>
+                          <h4 className="font-bold text-sm mt-0.5">{pub.title}</h4>
+                          <p className="text-xs text-on-surface-variant mt-1">{pub.authors}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingPubIndex(index);
+                              setEditPubForm({
+                                title: pub.title || "",
+                                authors: pub.authors || "",
+                                venue: pub.venue || "",
+                                publisher: pub.publisher || "",
+                                year: pub.year || "2025",
+                                link: pub.link || ""
+                              });
+                            }}
+                            className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-xs font-bold transition-colors"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              deletePublication(index);
+                              showToast("Publication deleted.");
+                            }}
+                            className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -526,21 +713,92 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 <h3 className="font-bold text-sm">Existing Experience ({experience.length})</h3>
                 {experience.map((exp: any, index: number) => (
-                  <div key={index} className="p-4 bg-surface-highest/40 border border-outline-variant/20 rounded-xl flex justify-between items-center gap-4">
-                    <div>
-                      <span className="text-secondary text-xs font-bold">{exp.period}</span>
-                      <h4 className="font-bold text-sm mt-0.5">{exp.role} at {exp.company}</h4>
-                      <p className="text-xs text-on-surface-variant mt-1">{exp.description}</p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        deleteExperience(index);
-                        showToast("Experience deleted.");
-                      }}
-                      className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition-colors"
-                    >
-                      Delete
-                    </button>
+                  <div key={index} className="p-4 bg-surface-highest/40 border border-outline-variant/20 rounded-xl space-y-4">
+                    {editingExpIndex === index ? (
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <input
+                            type="text"
+                            value={editExpForm.role}
+                            onChange={(e) => setEditExpForm({ ...editExpForm, role: e.target.value })}
+                            placeholder="Role"
+                            className="px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <input
+                            type="text"
+                            value={editExpForm.company}
+                            onChange={(e) => setEditExpForm({ ...editExpForm, company: e.target.value })}
+                            placeholder="Company"
+                            className="px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <input
+                            type="text"
+                            value={editExpForm.period}
+                            onChange={(e) => setEditExpForm({ ...editExpForm, period: e.target.value })}
+                            placeholder="Period"
+                            className="md:col-span-2 px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                          <textarea
+                            value={editExpForm.description}
+                            onChange={(e) => setEditExpForm({ ...editExpForm, description: e.target.value })}
+                            placeholder="Description"
+                            rows={2}
+                            className="md:col-span-2 px-3 py-2 bg-surface-highest border border-outline-variant/30 rounded-lg text-sm text-on-surface"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              updateExperience(index, editExpForm);
+                              setEditingExpIndex(null);
+                              showToast("Experience updated successfully!");
+                            }}
+                            className="px-4 py-2 bg-primary text-on-primary rounded-lg text-xs font-bold hover:bg-primary-container"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setEditingExpIndex(null)}
+                            className="px-4 py-2 bg-surface-highest text-on-surface rounded-lg text-xs font-bold"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-between items-center gap-4">
+                        <div>
+                          <span className="text-secondary text-xs font-bold">{exp.period}</span>
+                          <h4 className="font-bold text-sm mt-0.5">{exp.role} at {exp.company}</h4>
+                          <p className="text-xs text-on-surface-variant mt-1">{exp.description}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setEditingExpIndex(index);
+                              setEditExpForm({
+                                role: exp.role || "",
+                                company: exp.company || "",
+                                period: exp.period || "",
+                                description: exp.description || ""
+                              });
+                            }}
+                            className="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg text-xs font-bold transition-colors"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              deleteExperience(index);
+                              showToast("Experience deleted.");
+                            }}
+                            className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-xs font-bold transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
