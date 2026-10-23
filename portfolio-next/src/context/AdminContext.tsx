@@ -16,7 +16,12 @@ export const THEME_PALETTES: Record<string, { name: string; primary: string; sec
   emerald: { name: "Emerald Tech", primary: "#34d399", secondary: "#2dd4bf", container: "#059669" },
   indigo: { name: "Royal Indigo", primary: "#a78bfa", secondary: "#f472b6", container: "#8b5cf6" },
   amber: { name: "Sunset Amber", primary: "#fbbf24", secondary: "#fb923c", container: "#f59e0b" },
-  slate: { name: "Corporate Slate", primary: "#38bdf8", secondary: "#818cf8", container: "#0ea5e9" }
+  slate: { name: "Corporate Slate", primary: "#38bdf8", secondary: "#818cf8", container: "#0ea5e9" },
+  crimson: { name: "Crimson Eclipse", primary: "#fb7185", secondary: "#f43f5e", container: "#e11d48" },
+  violet: { name: "Neon Violet", primary: "#c084fc", secondary: "#e879f9", container: "#a855f7" },
+  cyan: { name: "Quantum Cyan", primary: "#22d3ee", secondary: "#38bdf8", container: "#0891b2" },
+  teal: { name: "Ocean Teal", primary: "#2dd4bf", secondary: "#34d399", container: "#0d9488" },
+  rose: { name: "Rose Gold", primary: "#fda4af", secondary: "#fbcfe8", container: "#f43f5e" }
 };
 
 interface AdminContextType {
