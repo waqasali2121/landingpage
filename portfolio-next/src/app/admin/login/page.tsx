@@ -12,13 +12,13 @@ export default function AdminLoginPage() {
   const { login } = useAdmin();
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const success = login(password);
     if (success) {
       router.push("/admin");
     } else {
-      setError("Invalid password. Default password is 'admin123'.");
+      setError("Invalid password.");
     }
   };
 
