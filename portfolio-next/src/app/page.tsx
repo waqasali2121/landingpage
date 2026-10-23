@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Research from "@/components/Research";
+import Projects from "@/components/Projects";
 import Timeline from "@/components/Timeline";
 import Publications from "@/components/Publications";
 import Skills from "@/components/Skills";
@@ -19,6 +20,7 @@ export default function Home() {
         <Hero />
         <About />
         <Research />
+        <Projects />
         <Timeline />
         <Publications />
         <Skills />

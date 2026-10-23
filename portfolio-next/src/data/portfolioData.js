@@ -141,6 +141,7 @@ export const awards = [
 export const navLinks = [
   { name: "Home", href: "#home" },
   { name: "Research", href: "#research" },
+  { name: "Projects", href: "#projects" },
   { name: "Experience", href: "#experience" },
   { name: "Publications", href: "#publications" },
   { name: "Skills", href: "#skills" },

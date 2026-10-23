@@ -142,6 +142,7 @@ export const urduData = {
   navLinks: [
     { name: "ہوم", href: "#home" },
     { name: "تحقیق", href: "#research" },
+    { name: "پروجیکٹس", href: "#projects" },
     { name: "تجربہ", href: "#experience" },
     { name: "مضامین", href: "#publications" },
     { name: "مہارتیں", href: "#skills" },
