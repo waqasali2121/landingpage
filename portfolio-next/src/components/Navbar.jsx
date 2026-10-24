@@ -90,7 +90,7 @@ export default function Navbar() {
           </button>
           <ThemeToggle />
           <a
-            href="/waqas-ali-cv.pdf"
+            href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/waqas-ali-cv.pdf`}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden md:flex items-center px-6 py-2 bg-primary text-on-primary text-sm font-medium rounded-full hover:scale-105 active:scale-95 transition-all rtl:font-nastaleeq rtl:text-lg rtl:py-1"
@@ -134,7 +134,7 @@ export default function Navbar() {
                 </a>
               ))}
               <a
-                href="/waqas-ali-cv.pdf"
+                href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/waqas-ali-cv.pdf`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 px-4 py-3 bg-primary text-on-primary text-sm font-medium rounded-lg text-center rtl:font-nastaleeq rtl:text-lg"
